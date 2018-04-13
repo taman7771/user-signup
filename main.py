@@ -9,10 +9,9 @@ form = """
 <html>
     <head>
         <style>
-            .error {
-                color: red;
-            }
+            .error {{color: red;}}
         </style>
+    
     </head>
     <body>
     <h1>Signup</h1>
@@ -22,28 +21,30 @@ form = """
                     <td><label for="username">Username</label></td>
                     <td>
                         <input name="username" type="text" value="">
-                        <span class="error"></span>
+                        <span class="error">{user_error}</span> 
                     </td>
                 </tr>
+
                 <tr>
                     <td><label for="password">Password</label></td>
                     <td>
                         <input name="password" type="password">
-                        <span class="error"></span>
+                        <span class="error">{password_error}</span>
                     </td>
                 </tr>
+
                 <tr>
                     <td><label for="verify">Verify Password</label></td>
                     <td>
                         <input name="verify" type="password">
-                        <span class="error"></span>
+                        <span class="error">{verify_error}</span>
                     </td>
                 </tr>
-                <tr>
+                    
                     <td><label for="email">Email (optional)</label></td>
                     <td>
                         <input name="email" value="">
-                        <span class="error"></span>
+                        <span class="error">{email_error}</span>
                     </td>
                 </tr>
             </table>
@@ -53,9 +54,9 @@ form = """
 </html>
 """
 
-@app.route("/")
+@app.route('/')
 def index():
-    return form
+    return form.format(user_error='',password_error='', verify_error='', email_error='')
 
 def valid_email(Email):
         
@@ -91,50 +92,44 @@ def validate():
     verify_error = ''
     email_error = ''
     
-    #empty input fields validation
-    if len(username)== 0 or len(password) == 0 or len(verify) == 0:
-        input_empty_error ='Please check if fields Username, Password or Verify password are empty!'
-        return '<h1>' + input_empty_error +  '</h1>'  
-
+    
     #Username validation
     if len(username) < 3 or len(username) > 20:
         user_error = 'Invalid User Name!'
         username =''
-        return '<h1>' + user_error +  '</h1>'  
+          
     elif len(username) >= 3 or len(username) < 20:
         for i in username:
             if i == ' ':
                user_error = 'Invalid User Name!' 
                username =''
-               return '<h1>' + user_error +  '</h1>'
-
+               
     #Password validation
     if len(password) < 3 or len(password) > 20:
         password_error = 'Invalid Password!'
         password =''
-        return '<h1>' + password_error +  '</h1>'
+        
     elif len(password) >= 3 or len(password) < 20:
         for j in password:
             if j == ' ':
                password_error = 'Invalid Password!'
                password = ''
-               return '<h1>' + password_error +  '</h1>'
-
+               
     #Password verification
     if  password != verify:
         verify_error = 'Password not matching!'
         verify = ''
-        return '<h1>' + verify_error +  '</h1>'
-    
+        
     #Email Validation
     if not valid_email(email):       
         email_error = 'Invalid Email!'
         email =''
-        return '<h1>' + email_error +  '</h1>'
-    
-    
+        
+      
     if not input_empty_error and not user_error and not password_error and not verify_error and not email_error:
-        return '<h1>Welcome to Our Page!</h1>'
+        return '<h1>Welcome '+ username + '!</h1>'
+    else:
+        return form.format(user_error=user_error,password_error=password_error, verify_error=verify_error, email_error=email_error)
    
   
 
